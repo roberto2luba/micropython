@@ -1,0 +1,35 @@
+name: Compilar MicroPython 16MB
+
+on:
+  push:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar Repositório
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Instalar Dependências
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential python3
+
+      - name: Compilar mpy-cross
+        run: |
+          make -C mpy-cross
+
+      - name: Compilar MicroPython para RPI_PICO_16MB
+        run: |
+          cd ports/rp2
+          make BOARD=RPI_PICO_16MB
+
+      - name: Salvar Arquivo .uf2 como Artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-16mb
+          path: ports/rp2/build-RPI_PICO_16MB/firmware.uf2
