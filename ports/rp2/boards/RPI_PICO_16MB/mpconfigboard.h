@@ -1,2 +1,2 @@
-// Herda as configurações de hardware da Raspberry Pi Pico original
-#include_next <mpconfigboard.h>
+// Inclui diretamente o arquivo de configuração da placa base Raspberry Pi Pico original
+#include "../RPI_PICO/mpconfigboard.h"
